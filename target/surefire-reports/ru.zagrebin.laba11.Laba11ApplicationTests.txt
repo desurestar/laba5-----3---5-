@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: ru.zagrebin.laba11.Laba11ApplicationTests
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 3.198 s -- in ru.zagrebin.laba11.Laba11ApplicationTests

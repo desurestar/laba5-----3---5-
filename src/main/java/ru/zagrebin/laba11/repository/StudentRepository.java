@@ -32,7 +32,7 @@ public class StudentRepository {
             s.setPhoneNumber(rs.getString("phone_number"));
             s.setGpa(rs.getDouble("gpa"));
             s.setSpeciality(rs.getString("speciality"));
-            s.setAddress();
+            s.setAddress(null);
             return s;
         });
     }
