@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="UTF-8" />
+		<title>Поиск студентов</title>
+		<link rel="stylesheet" th:href="@{/css/main.css}" />
+	</head>
+	<body>
+		<div class="container">
+			<h1>Поиск студентов</h1>
+
+			<h2>Одиночный критерий</h2>
+			<form th:action="@{/students/search}" method="post" class="search-form">
+				<div class="form-group">
+					<label for="searchType">Тип поиска:</label>
+					<select id="searchType" name="searchType" th:value="${searchType}">
+						<option value="lastName">По фамилии</option>
+						<option value="city">По городу</option>
+						<option value="gpa">По GPA (мин. значение)</option>
+						<option value="group">По группе</option>
+						<option value="speciality">По специальности</option>
+					</select>
+				</div>
+
+				<div class="form-group">
+					<label for="searchValue">Значение для поиска:</label>
+					<input
+						type="text"
+						id="searchValue"
+						name="searchValue"
+						th:value="${searchValue}"
+						placeholder="Введите значение для поиска"
+						required
+					/>
+				</div>
+
+				<button type="submit" class="btn btn-primary">Искать</button>
+				<a th:href="@{/institut}" class="btn btn-secondary">Назад</a>
+			</form>
+
+			<h2>Комбинированный поиск</h2>
+			<form
+				th:action="@{/students/search/combined}"
+				method="post"
+				class="search-form"
+			>
+				<div class="form-group">
+					<label for="ln">Фамилия (содержит):</label>
+					<input
+						type="text"
+						id="ln"
+						name="lastName"
+						th:value="${ln}"
+						placeholder="Иванов"
+					/>
+				</div>
+				<div class="form-group">
+					<label for="ct">Город (содержит):</label>
+					<input
+						type="text"
+						id="ct"
+						name="city"
+						th:value="${ct}"
+						placeholder="Москва"
+					/>
+				</div>
+				<div class="form-group">
+					<label for="mg">Мин. GPA:</label>
+					<input
+						type="number"
+						step="0.1"
+						min="0"
+						max="5"
+						id="mg"
+						name="minGpa"
+						th:value="${mg}"
+						placeholder="3.5"
+					/>
+				</div>
+
+				<button type="submit" class="btn btn-primary">Искать</button>
+				<a th:href="@{/institut}" class="btn btn-secondary">Назад</a>
+			</form>
+
+			<div th:if="${error}" class="error-message" th:text="${error}"></div>
+
+			<div th:if="${students != null}">
+				<h2>
+					Результаты поиска: <span th:text="${students.size()}"></span> найдено
+				</h2>
+
+				<div th:if="${students.isEmpty()}">
+					<p>Студенты не найдены</p>
+				</div>
+
+				<table th:unless="${students.isEmpty()}" class="results-table">
+					<thead>
+						<tr>
+							<th>Фамилия</th>
+							<th>Имя</th>
+							<th>Группа</th>
+							<th>GPA</th>
+							<th>Город</th>
+							<th>Действия</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="student : ${students}">
+							<td th:text="${student.lastName}"></td>
+							<td th:text="${student.firstName}"></td>
+							<td th:text="${student.studentGroup?.name}">Нет группы</td>
+							<td th:text="${student.gpa}"></td>
+							<td th:text="${student.address?.city}">Нет адреса</td>
+							<td>
+								<a th:href="@{'/details/' + ${student.id}}" class="btn btn-info"
+									>Подробнее</a
+								>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</body>
+</html>

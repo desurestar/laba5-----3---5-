@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="UTF-8" />
+		<title>Список студентов</title>
+		<link rel="stylesheet" th:href="@{/css/main.css}" />
+	</head>
+	<body>
+		<div class="container">
+			<h1>Институт</h1>
+
+			<!-- Кнопка поиска -->
+			<a class="btn btn-primary" th:href="@{/students/search}"
+				>Поиск студентов</a
+			>
+
+			<span th:if="${students.size() == 0}">Список студентов пустой</span>
+			<table th:if="${students.size() > 0}" class="table table-hover">
+				<thead class="thead-dark">
+					<tr>
+						<td>ID</td>
+						<td>Фамилия</td>
+						<td>Имя</td>
+						<td>Отчество</td>
+						<td>Пол</td>
+						<td>Группа</td>
+						<td>Специальность</td>
+						<td>GPA</td>
+						<td>Город</td>
+						<td></td>
+						<td></td>
+						<td></td>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="student : ${students}">
+						<td th:text="${student.id}" />
+						<td th:text="${student.lastName}" />
+						<td th:text="${student.firstName}" />
+						<td th:text="${student.patronymic}" />
+						<td th:text="${student.gender}" />
+						<td th:text="${student.studentGroup?.name}">Нет группы</td>
+						<td th:text="${student.studentGroup?.speciality}">
+							Нет специальности
+						</td>
+						<td th:text="${student.gpa}" />
+						<td th:text="${student.address?.city}">Нет адреса</td>
+						<td>
+							<a
+								class="btn btn-secondary"
+								th:href="@{'/details/' + ${student.id}}"
+								>Подробнее</a
+							>
+						</td>
+						<td>
+							<a
+								class="btn btn-secondary"
+								th:href="@{'/students/editStudent/' + ${student.id}}"
+								>Редактировать</a
+							>
+						</td>
+						<td>
+							<a
+								class="btn btn-danger"
+								th:href="@{'/students/delete/' + ${student.id}}"
+								>Удалить</a
+							>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+
+			<a class="btn btn-success" th:href="@{/students/addStudentForm}"
+				>Добавить нового студента</a
+			>
+		</div>
+	</body>
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="UTF-8" />
+		<title>Результат</title>
+		<link rel="stylesheet" th:href="@{/css/main.css}" />
+	</head>
+	<body>
+		<div class="container">
+			<h1>Информация о студенте</h1>
+			<div class="info">
+				<p th:text="'ID: ' + ${student.id}" />
+				<p th:text="'Фамилия: ' + ${student.lastName}" />
+				<p th:text="'Имя: ' + ${student.firstName}" />
+				<p th:text="'Отчество: ' + ${student.patronymic}" />
+				<p th:text="'Пол: ' + ${student.gender}" />
+				<p th:text="'Национальность: ' + ${student.nationality}" />
+				<p th:text="'Рост: ' + ${student.height} + ' см'" />
+				<p th:text="'Вес: ' + ${student.weight} + ' кг'" />
+				<p th:text="'Дата рождения: ' + ${student.birthDate}" />
+				<p th:text="'Номер телефона: ' + ${student.phoneNumber}" />
+				<p th:text="'Средний балл: ' + ${student.gpa}" />
+
+				<p
+					th:if="${student.address != null}"
+					th:text="'Адрес: ' + ${student.address.city} + ', ' + ${student.address.street} + ', ' + ${student.address.house} + ', кв. ' + ${student.address.apartment}"
+				/>
+				<p th:if="${student.address == null}">Адрес: Не указан</p>
+
+				<p
+					th:if="${student.studentGroup != null}"
+					th:text="'Группа: ' + ${student.studentGroup.name}"
+				/>
+				<p
+					th:if="${student.studentGroup != null}"
+					th:text="'Специальность: ' + ${student.studentGroup.speciality}"
+				/>
+				<p
+					th:if="${student.studentGroup != null and student.studentGroup.university != null}"
+					th:text="'ВУЗ: ' + ${student.studentGroup.university.name}"
+				/>
+				<p th:if="${student.studentGroup == null}">Группа: Не указана</p>
+
+				<p th:if="${student.courses != null and !student.courses.isEmpty()}">
+					Курсы:
+					<span
+						th:each="course, iterStat : ${student.courses}"
+						th:text="${course.name} + (${iterStat.last} ? '' : ', ')"
+					></span>
+				</p>
+				<p th:if="${student.courses == null or student.courses.isEmpty()}">
+					Курсы: Не указаны
+				</p>
+			</div>
+			<div class="actions">
+				<a href="/institut" class="btn btn-back">Назад к списку</a>
+			</div>
+		</div>
+	</body>
+</html>
