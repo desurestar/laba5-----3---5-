@@ -9,8 +9,5 @@ target/
 # OS files
 .DS_Store
 
-# Maven wrapper (optional)
-!.mvn/wrapper/maven-wrapper.jar
-
 # Log files
 *.log

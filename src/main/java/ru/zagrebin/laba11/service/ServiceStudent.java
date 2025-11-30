@@ -101,8 +101,8 @@ public class ServiceStudent {
         return students;
     }
 
-    public List<Student> findByFirstNameAndGroupName(String firstName, String groupName) {
-        List<Student> students = studentRepository.findByLastNameAndGroupName(firstName, groupName);
+    public List<Student> findByLastNameAndGroupName(String lastName, String groupName) {
+        List<Student> students = studentRepository.findByLastNameAndGroupName(lastName, groupName);
         fillSearchResultAssociations(students);
         return students;
     }
