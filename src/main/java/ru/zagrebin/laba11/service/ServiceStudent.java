@@ -58,43 +58,61 @@ public class ServiceStudent {
         return studentRepository.existsById(id);
     }
 
-    // В методах поиска НЕ заполняем связи (чтобы избежать циклов)
+    // В методах поиска заполняем только минимально необходимые связи для отображения
     public List<Student> findByLastName(String lastName) {
-        return studentRepository.findByLastNameContainingIgnoreCase(lastName);
+        List<Student> students = studentRepository.findByLastNameContainingIgnoreCase(lastName);
+        fillSearchResultAssociations(students);
+        return students;
     }
 
     public List<Student> findByGpaGreaterThanEqual(Double gpa) {
-        return studentRepository.findByGpaGreaterThanEqual(gpa);
+        List<Student> students = studentRepository.findByGpaGreaterThanEqual(gpa);
+        fillSearchResultAssociations(students);
+        return students;
     }
 
     public List<Student> findByCity(String city) {
-        return studentRepository.findByCity(city);
+        List<Student> students = studentRepository.findByCity(city);
+        fillSearchResultAssociations(students);
+        return students;
     }
 
     public List<Student> findByGroupName(String groupName) {
-        return studentRepository.findByGroupName(groupName);
+        List<Student> students = studentRepository.findByGroupName(groupName);
+        fillSearchResultAssociations(students);
+        return students;
     }
 
     public List<Student> findBySpeciality(String speciality) {
-        return studentRepository.findBySpeciality(speciality);
+        List<Student> students = studentRepository.findBySpeciality(speciality);
+        fillSearchResultAssociations(students);
+        return students;
     }
 
     public List<Student> findByLastNameAndGpa(String lastName, Double gpa) {
-        return studentRepository.findByLastNameAndGpa(lastName, gpa);
+        List<Student> students = studentRepository.findByLastNameAndGpa(lastName, gpa);
+        fillSearchResultAssociations(students);
+        return students;
     }
 
     public List<Student> findByCityAndSpeciality(String city, String speciality) {
-        return studentRepository.findByCityAndSpeciality(city, speciality);
+        List<Student> students = studentRepository.findByCityAndSpeciality(city, speciality);
+        fillSearchResultAssociations(students);
+        return students;
     }
 
     public List<Student> findByFirstNameAndGroupName(String firstName, String groupName) {
-        return studentRepository.findByLastNameAndGroupName(firstName, groupName);
+        List<Student> students = studentRepository.findByLastNameAndGroupName(firstName, groupName);
+        fillSearchResultAssociations(students);
+        return students;
     }
 
     public List<Student> searchCombined(String lastName, String city, Double minGpa) {
         String ln = normalize(lastName);
         String ct = normalize(city);
-        return studentRepository.searchCombined(ln, ct, minGpa);
+        List<Student> students = studentRepository.searchCombined(ln, ct, minGpa);
+        fillSearchResultAssociations(students);
+        return students;
     }
 
     public List<Student> findByAddressId(Long addressId) {
@@ -120,6 +138,18 @@ public class ServiceStudent {
 
         if (student.getId() != null) {
             student.setCourses(serviceCourse.findByStudentId(student.getId()));
+        }
+    }
+
+    // Fill only address and group for search results (no deep associations to avoid cycles)
+    private void fillSearchResultAssociations(List<Student> students) {
+        for (Student student : students) {
+            if (student.getAddress() != null && student.getAddress().getId() != null) {
+                student.setAddress(serviceAddress.findAddressById(student.getAddress().getId()));
+            }
+            if (student.getStudentGroup() != null && student.getStudentGroup().getId() != null) {
+                student.setStudentGroup(serviceStudentGroup.findStudentGroupById(student.getStudentGroup().getId()));
+            }
         }
     }
 
